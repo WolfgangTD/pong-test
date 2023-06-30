@@ -33,14 +33,23 @@ public class Ball : MonoBehaviour
     void InitialLaunch()
     {
         // an angle is generated for each sides potential start, cant be too close to 0 or it will just start bouncing on walls for a while.
-        float rand_angle_right = Random.Range(35,125);
-        float rand_angle_left = Random.Range(235,325);
+        float rand_angle = Random.Range(35,125);
         float start_side = Random.Range(0,2)*2-1; //chooses starter side
 
         start = true;
-        float angleInRadians = (rand_angle_right-90) * Mathf.Deg2Rad;
+        float angleInRadians = (rand_angle+(90*start_side)) * Mathf.Deg2Rad;
         direction = new Vector2(Mathf.Cos(angleInRadians), Mathf.Sin(angleInRadians));
-
         
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Wall"))
+        {
+            direction.y = -direction.y;
+        }else if(collision.gameObject.CompareTag("Player1") || collision.gameObject.CompareTag("player2"))
+        {
+            direction.x = -direction.x;
+        }
     }
 }
